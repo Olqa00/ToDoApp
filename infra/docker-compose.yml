@@ -1,0 +1,23 @@
+services:
+  seq:
+    container_name: seq
+    image: datalust/seq:latest
+    environment:
+      ACCEPT_EULA: Y
+    volumes:
+      - seq_data:/data
+    ports:
+      - "5341:80"
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd
+      MYSQL_DATABASE: todo_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+volumes:
+    seq_data:
+    mysql:
