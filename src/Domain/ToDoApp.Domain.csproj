@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Using Include="ToDoApp.Domain.Types" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ToDoApp.Domain.UnitTests" />
+  </ItemGroup>
+
 </Project>

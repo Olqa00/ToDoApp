@@ -161,9 +161,9 @@ coverage*.info
 _NCrunch_*
 .*crunch*.local.xml
 nCrunchTemp_*
-Planner.v3.ncrunchsolution
-/src/Planner.v3.ncrunchsolution
-/tests/Planner.UnitTests.v3.ncrunchsolution
+TodoApp.v3.ncrunchsolution
+/src/TodoApp.v3.ncrunchsolution
+/tests/TodoApp.UnitTests.v3.ncrunchsolution
 
 # MightyMoose
 *.mm.*
