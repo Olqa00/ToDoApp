@@ -169,7 +169,7 @@ public sealed class TaskEntityTests
         var task = new TaskEntity(ID, TITLE, CREATED_AT, DESCRIPTION, EXPIRY_DATE_TIME);
 
         // Act
-        task.SetPercentComplete(FULL_PERCENT);
+        task.SetPercentComplete(FULL_PERCENT, COMPETED_AT_1);
 
         // Assert
         task.PercentComplete.Should()
@@ -177,7 +177,7 @@ public sealed class TaskEntityTests
             ;
 
         task.CompletedAt.Should()
-            .NotBeNull()
+            .Be(COMPETED_AT_1)
             ;
     }
 
@@ -186,12 +186,17 @@ public sealed class TaskEntityTests
     {
         // Arrange
         var task = new TaskEntity(ID, TITLE, CREATED_AT, DESCRIPTION, EXPIRY_DATE_TIME);
+
         // Act
-        task.SetPercentComplete(PERCENT);
+        task.SetPercentComplete(PERCENT, COMPETED_AT_1);
 
         // Assert
         task.PercentComplete.Should()
             .Be(PERCENT)
+            ;
+
+        task.CompletedAt.Should()
+            .BeNull()
             ;
     }
 
@@ -202,7 +207,7 @@ public sealed class TaskEntityTests
         var task = new TaskEntity(ID, TITLE, CREATED_AT, DESCRIPTION, EXPIRY_DATE_TIME);
 
         // Act
-        var act = () => task.SetPercentComplete(invalidPercent);
+        var act = () => task.SetPercentComplete(invalidPercent, COMPETED_AT_1);
 
         // Assert
         act.Should()
@@ -242,6 +247,23 @@ public sealed class TaskEntityTests
             ;
     }
 
+    [Theory, InlineData(-2), InlineData(101)]
+    public void UnComplete_Should_ThrowException_When_PercentIsOutOfRange(int invalidPercent)
+    {
+        // Arrange
+        var task = new TaskEntity(ID, TITLE, CREATED_AT, DESCRIPTION, EXPIRY_DATE_TIME);
+        task.Complete(COMPETED_AT_1);
+
+        // Act
+        var act = () => task.UnComplete(invalidPercent);
+
+        // Assert
+        act.Should()
+            .Throw<TaskInvalidPercentException>()
+            .WithMessage($"Task with id '{ID.Value}' cannot have percent complete set to {invalidPercent}. Allowed range is 0–100.")
+            ;
+    }
+
     [Fact]
     public void UnComplete_Should_ThrowException_When_TaskIsNotCompleted()
     {
@@ -249,7 +271,7 @@ public sealed class TaskEntityTests
         var task = new TaskEntity(ID, TITLE, CREATED_AT, DESCRIPTION, EXPIRY_DATE_TIME);
 
         // Act
-        var act = () => task.UnComplete();
+        var act = () => task.UnComplete(PERCENT);
 
         // Assert
         act.Should()
@@ -266,11 +288,15 @@ public sealed class TaskEntityTests
         task.Complete(COMPETED_AT_1);
 
         // Act
-        task.UnComplete();
+        task.UnComplete(null);
 
         // Assert
         task.CompletedAt.Should()
             .BeNull()
+            ;
+
+        task.PercentComplete.Should()
+            .Be(0)
             ;
     }
 }

@@ -24,7 +24,7 @@ public sealed class TaskEntity
         this.PercentComplete = 0;
     }
 
-    public void Complete(DateTime completedAt)
+    public void Complete(DateTime? completedAt)
     {
         if (this.IsCompleted is true)
         {
@@ -36,6 +36,7 @@ public sealed class TaskEntity
             throw new TaskCompletedBeforeCreationException(this.Id);
         }
 
+        this.PercentComplete = 100;
         this.CompletedAt = completedAt;
     }
 
@@ -59,7 +60,7 @@ public sealed class TaskEntity
         this.Description = description;
     }
 
-    public void SetPercentComplete(int percent)
+    public void SetPercentComplete(int percent, DateTime? completedAt)
     {
         if (percent is < 0 or > 100)
         {
@@ -68,9 +69,9 @@ public sealed class TaskEntity
 
         this.PercentComplete = percent;
 
-        if (percent == 100)
+        if (percent is 100)
         {
-            this.Complete(DateTime.Now);
+            this.Complete(completedAt);
         }
     }
 
@@ -84,13 +85,19 @@ public sealed class TaskEntity
         this.Title = title;
     }
 
-    public void UnComplete()
+    public void UnComplete(int? percent)
     {
         if (this.IsCompleted is false)
         {
             throw new TaskNotCompletedException(this.Id);
         }
 
+        if (percent is < 0 or >= 100)
+        {
+            throw new TaskInvalidPercentException(this.Id, percent.Value);
+        }
+
+        this.PercentComplete = percent ?? 0;
         this.CompletedAt = null;
     }
 }
