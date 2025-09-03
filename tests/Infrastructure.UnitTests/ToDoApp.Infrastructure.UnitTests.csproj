@@ -20,6 +20,7 @@
     <Using Include="FluentAssertions" />
     <Using Include="Microsoft.Extensions.Logging.Abstractions" />
     <Using Include="NSubstitute" />
+    <Using Include="ToDoApp.Domain.Types" />
     <Using Include="Xunit" />
   </ItemGroup>
 

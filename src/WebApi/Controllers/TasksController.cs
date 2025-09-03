@@ -1,5 +1,6 @@
 ﻿namespace ToDoApp.WebApi.Controllers;
 
+using ToDoApp.Application.Commands;
 using ToDoApp.Application.Queries;
 using ToDoApp.Application.Results;
 
@@ -11,6 +12,14 @@ public sealed class TasksController : ControllerBase
     public TasksController(ISender mediator)
     {
         this.mediator = mediator;
+    }
+
+    [HttpPost, Route("AddTask")]
+    public async Task<IActionResult> AddTask([FromBody] AddTask command, CancellationToken cancellationToken)
+    {
+        await this.mediator.Send(command, cancellationToken);
+
+        return this.Accepted();
     }
 
     [HttpGet, Route("GetTasks")]

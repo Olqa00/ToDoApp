@@ -1,45 +1,41 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿#nullable disable
 
-#nullable disable
+namespace ToDoApp.Infrastructure.Migrations;
 
-namespace ToDoApp.Infrastructure.Migrations
+/// <inheritdoc />
+public partial class InitialCreate : Migration
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    protected override void Down(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
+        migrationBuilder.DropTable(
+            name: "Tasks");
+    }
 
-            migrationBuilder.CreateTable(
-                name: "Tasks",
-                columns: table => new
+    /// <inheritdoc />
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.AlterDatabase()
+            .Annotation("MySql:CharSet", "utf8mb4");
+
+        migrationBuilder.CreateTable(
+                "Tasks",
+                table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    CompletedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Description = table.Column<string>(type: "longtext", nullable: false)
+                    Id = table.Column<Guid>("char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CompletedAt = table.Column<DateTime>("datetime(6)", nullable: true),
+                    CreatedAt = table.Column<DateTime>("datetime(6)", nullable: false),
+                    Description = table.Column<string>("longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ExpiryDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PercentComplete = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    ExpiryDateTime = table.Column<DateTime>("datetime(6)", nullable: false),
+                    PercentComplete = table.Column<int>("int", nullable: false),
+                    Title = table.Column<string>("longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tasks", x => x.Id);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Tasks");
-        }
+            .Annotation("MySql:CharSet", "utf8mb4");
     }
 }

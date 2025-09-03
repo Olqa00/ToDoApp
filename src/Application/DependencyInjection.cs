@@ -13,6 +13,8 @@ public static class DependencyInjection
         services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
 
+        services.AddSingleton(TimeProvider.System);
+
         return services;
     }
 }

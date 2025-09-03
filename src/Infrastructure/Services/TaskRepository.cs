@@ -1,6 +1,5 @@
 ﻿namespace ToDoApp.Infrastructure.Services;
 
-using Microsoft.Extensions.Logging;
 using ToDoApp.Application.Interfaces;
 using ToDoApp.Application.Results;
 using ToDoApp.Domain.Entities;
@@ -21,11 +20,41 @@ internal sealed class TaskRepository : ITaskRepository
         this.tasks = dbContext.Tasks;
     }
 
-    public Task AddTaskAsync(TaskEntity task, CancellationToken cancellationToken)
-        => throw new NotImplementedException();
+    public async Task AddTaskAsync(TaskEntity entity, CancellationToken cancellationToken)
+    {
+        using var loggerScope = this.logger.BeginScope(
+            (nameof(TaskId), entity.Id)
+        );
 
-    public Task<TaskResult?> GetTaskByIdAsync(TaskId id, CancellationToken cancellationToken)
-        => throw new NotImplementedException();
+        this.logger.LogInformation("Try to add task to db");
+
+        var dbModel = entity.ToDbModel();
+
+        await this.dbContext.AddAsync(dbModel, cancellationToken);
+        await this.dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<TaskResult?> GetTaskByIdAsync(TaskId id, CancellationToken cancellationToken)
+    {
+        using var loggerScope = this.logger.BeginScope(
+            (nameof(TaskId), id)
+        );
+
+        this.logger.LogInformation("Try to get task from db by id");
+
+        var dbModel = await this.tasks.FirstOrDefaultAsync(task => task.Id == id.Value, cancellationToken);
+
+        if (dbModel is null)
+        {
+            this.logger.LogWarning("Task not found in db");
+
+            return null;
+        }
+
+        var result = dbModel.ToResult();
+
+        return result;
+    }
 
     public async Task<IReadOnlyList<TaskResult>> GetTasksAsync(CancellationToken cancellationToken)
     {
