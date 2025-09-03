@@ -19,8 +19,6 @@ internal sealed class ToDoDbContextFactory : IDesignTimeDbContextFactory<ToDoDbC
 
         var optionsBuilder = new DbContextOptionsBuilder<ToDoDbContext>();
 
-        Console.WriteLine($"ConnectionString: {connectionString}");
-
         optionsBuilder
             .UseMySql(
                 connectionString,
