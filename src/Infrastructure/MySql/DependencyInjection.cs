@@ -4,13 +4,11 @@ public static class DependencyInjection
 {
     private const string OPTIONS_SECTION_NAME = "MySql";
 
-    public static IServiceCollection AddMySql(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMySqlDb(this IServiceCollection services, IConfiguration configuration)
     {
         var section = configuration.GetSection(OPTIONS_SECTION_NAME);
         services.Configure<MySqlOptions>(section);
         var options = configuration.GetOptions<MySqlOptions>(OPTIONS_SECTION_NAME);
-
-        Console.WriteLine($"ConnectionString di: {options.ConnectionString}");
 
         services.AddDbContext<ToDoDbContext>(option => option.UseMySql(options.ConnectionString,
             ServerVersion.AutoDetect(options.ConnectionString),

@@ -4,22 +4,22 @@ using ToDoApp.Application.Interfaces;
 using ToDoApp.Application.Queries;
 using ToDoApp.Application.Results;
 
-internal sealed class GetTasksHandler : IRequestHandler<GetTasks, IReadOnlyList<TaskResult>>
+public sealed class GetTasksHandler : IRequestHandler<GetTasks, IReadOnlyList<TaskResult>>
 {
     private readonly ILogger<GetTasksHandler> logger;
-    private readonly ITaskRepository taskRepository;
+    private readonly ITaskRepository repository;
 
-    public GetTasksHandler(ILogger<GetTasksHandler> logger, ITaskRepository taskRepository)
+    public GetTasksHandler(ILogger<GetTasksHandler> logger, ITaskRepository repository)
     {
         this.logger = logger;
-        this.taskRepository = taskRepository;
+        this.repository = repository;
     }
 
     public async Task<IReadOnlyList<TaskResult>> Handle(GetTasks request, CancellationToken cancellationToken)
     {
         this.logger.LogInformation("Try to get tasks.");
 
-        var tasks = await this.taskRepository.GetTasksAsync(cancellationToken);
+        var tasks = await this.repository.GetTasksAsync(cancellationToken);
 
         return tasks;
     }

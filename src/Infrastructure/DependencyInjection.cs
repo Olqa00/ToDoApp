@@ -12,7 +12,7 @@ public static class DependencyInjection
         var assembly = Assembly.GetExecutingAssembly();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
 
-        services.AddMySql(configuration);
+        services.AddMySqlDb(configuration);
 
         services.AddScoped<ITaskRepository, TaskRepository>();
 
