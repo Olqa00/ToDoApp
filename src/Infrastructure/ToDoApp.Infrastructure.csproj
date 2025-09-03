@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="MediatR" />
     <Using Include="Microsoft.EntityFrameworkCore" />
     <Using Include="Microsoft.EntityFrameworkCore.Design" />
     <Using Include="Microsoft.EntityFrameworkCore.Metadata.Builders" />
@@ -32,4 +33,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="ToDoApp.Infrastructure.UnitTests" />
+  </ItemGroup>
 </Project>
