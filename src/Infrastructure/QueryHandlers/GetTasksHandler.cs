@@ -5,7 +5,7 @@ using ToDoApp.Application.Queries;
 using ToDoApp.Application.Results;
 using ToDoApp.Infrastructure.Extensions;
 
-public sealed class GetTasksHandler : IRequestHandler<GetTasks, IReadOnlyList<TaskResult>>
+internal sealed class GetTasksHandler : IRequestHandler<GetTasks, IReadOnlyList<TaskResult>>
 {
     private readonly ILogger<GetTasksHandler> logger;
     private readonly ITaskRepository repository;

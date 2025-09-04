@@ -65,4 +65,21 @@ internal sealed class TaskRepository : ITaskRepository
 
         return entities;
     }
+
+    public async Task<IReadOnlyList<TaskEntity>> GetTasksDueOnDay(DateTime expiryDate, CancellationToken cancellationToken)
+    {
+        this.logger.LogInformation("Try to get tasks by expiry date from db");
+
+        var start = expiryDate.Date;
+        var end = start.AddDays(1);
+
+        var taskDbModels = await this.tasks
+            .Where(task => task.PercentComplete != 100)
+            .Where(task => task.ExpiryDateTime >= start && task.ExpiryDateTime < end)
+            .ToListAsync(cancellationToken);
+
+        var entities = taskDbModels.ToEntities();
+
+        return entities;
+    }
 }
