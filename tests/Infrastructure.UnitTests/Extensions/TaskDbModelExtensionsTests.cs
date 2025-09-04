@@ -1,6 +1,7 @@
 ﻿namespace ToDoApp.Infrastructure.UnitTests.Extensions;
 
 using ToDoApp.Application.Results;
+using ToDoApp.Domain.Entities;
 using ToDoApp.Infrastructure.Extensions;
 using ToDoApp.Infrastructure.Models;
 
@@ -20,7 +21,9 @@ public sealed class TaskDbModelExtensionsTests
     private static readonly DateTime EXPIRY_DATE_TIME_2 = new(year: 2025, month: 11, day: 10, hour: 10, minute: 0, second: 0, DateTimeKind.Utc);
 
     private static readonly Guid TASK_ID_GUID_1 = Guid.NewGuid();
+    private static readonly TaskId TASK_ID_1 = new(TASK_ID_GUID_1);
     private static readonly Guid TASK_ID_GUID_2 = Guid.NewGuid();
+    private static readonly TaskId TASK_ID_2 = new(TASK_ID_GUID_2);
 
     private static readonly TaskDbModel TASK_DB_MODEL_1 = new()
     {
@@ -79,6 +82,51 @@ public sealed class TaskDbModelExtensionsTests
         TASK_RESULT_1,
         TASK_RESULT_2,
     ];
+
+    private readonly TaskEntity taskEntity1;
+    private readonly TaskEntity taskEntity2;
+
+    public TaskDbModelExtensionsTests()
+    {
+        this.taskEntity1 = new TaskEntity(TASK_ID_1, TITLE_1, CREATED_AT_1, DESCRIPTION_1, EXPIRY_DATE_TIME_1);
+        this.taskEntity2 = new TaskEntity(TASK_ID_2, TITLE_2, CREATED_AT_2, DESCRIPTION_2, EXPIRY_DATE_TIME_2);
+
+        this.taskEntity1.Complete(COMPETED_AT_1);
+        this.taskEntity2.SetPercentComplete(PERCENT_2, completedAt: null);
+    }
+
+    [Fact]
+    public void ToEntities_Should_ReturnEntities()
+    {
+        // Arrange
+        var entities = new List<TaskEntity>
+        {
+            this.taskEntity1,
+            this.taskEntity2,
+        };
+
+        // Act
+        var result = TASK_DB_MODELS.ToEntities();
+
+        // Assert
+        result.Should()
+            .BeEquivalentTo(entities)
+            ;
+    }
+
+    [Fact]
+    public void ToEntity_Should_ReturnEntity()
+    {
+        // Arrange
+
+        // Act
+        var result = TASK_DB_MODEL_1.ToEntity();
+
+        // Assert
+        result.Should()
+            .BeEquivalentTo(this.taskEntity1)
+            ;
+    }
 
     [Fact]
     public void ToResult_Should_ReturnResult()

@@ -1,7 +1,6 @@
 ﻿namespace ToDoApp.Infrastructure.Services;
 
 using ToDoApp.Application.Interfaces;
-using ToDoApp.Application.Results;
 using ToDoApp.Domain.Entities;
 using ToDoApp.Infrastructure.Extensions;
 using ToDoApp.Infrastructure.Models;
@@ -34,7 +33,7 @@ internal sealed class TaskRepository : ITaskRepository
         await this.dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<TaskResult?> GetTaskByIdAsync(TaskId id, CancellationToken cancellationToken)
+    public async Task<TaskEntity?> GetTaskByIdAsync(TaskId id, CancellationToken cancellationToken)
     {
         using var loggerScope = this.logger.BeginScope(
             (nameof(TaskId), id)
@@ -51,19 +50,19 @@ internal sealed class TaskRepository : ITaskRepository
             return null;
         }
 
-        var result = dbModel.ToResult();
+        var entities = dbModel.ToEntity();
 
-        return result;
+        return entities;
     }
 
-    public async Task<IReadOnlyList<TaskResult>> GetTasksAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<TaskEntity>> GetTasksAsync(CancellationToken cancellationToken)
     {
         this.logger.LogInformation("Try to get tasks from db");
 
         var taskDbModels = await this.tasks.ToListAsync(cancellationToken);
 
-        var results = taskDbModels.ToResults();
+        var entities = taskDbModels.ToEntities();
 
-        return results;
+        return entities;
     }
 }

@@ -6,7 +6,7 @@ using ToDoApp.Application.Results;
 using ToDoApp.Domain.Entities;
 using ToDoApp.Infrastructure.QueryHandlers;
 
-public sealed class GetTasksHandlerTests
+public sealed class GetTaskByIdHandlerTests
 {
     private const string DESCRIPTION_1 = "description-1";
     private const string DESCRIPTION_2 = "description-2";
@@ -49,19 +49,13 @@ public sealed class GetTasksHandlerTests
         Title = TITLE_2,
     };
 
-    private static readonly List<TaskResult> TASK_RESULTS =
-    [
-        TASK_RESULT_1,
-        TASK_RESULT_2,
-    ];
-
-    private readonly GetTasksHandler handler;
-    private readonly NullLogger<GetTasksHandler> logger = new();
+    private readonly GetTaskByIdHandler handler;
+    private readonly NullLogger<GetTaskByIdHandler> logger = new();
     private readonly TaskEntity taskEntity1;
     private readonly TaskEntity taskEntity2;
     private readonly ITaskRepository taskRepository = Substitute.For<ITaskRepository>();
 
-    public GetTasksHandlerTests()
+    public GetTaskByIdHandlerTests()
     {
         this.taskEntity1 = new TaskEntity(TASK_ID_1, TITLE_1, CREATED_AT_1, DESCRIPTION_1, EXPIRY_DATE_TIME_1);
         this.taskEntity1.Complete(COMPETED_AT_1);
@@ -69,52 +63,69 @@ public sealed class GetTasksHandlerTests
         this.taskEntity2 = new TaskEntity(TASK_ID_2, TITLE_2, CREATED_AT_2, DESCRIPTION_2, EXPIRY_DATE_TIME_2);
         this.taskEntity2.SetPercentComplete(PERCENT_2, completedAt: null);
 
-        this.handler = new GetTasksHandler(this.logger, this.taskRepository);
+        this.handler = new GetTaskByIdHandler(this.logger, this.taskRepository);
     }
 
     [Fact]
-    public async Task Handle_Should_Return_EmptyList_When_NoTasks()
+    public async Task Handle_ShouldReturnCompletedTask_WhenTaskExists()
     {
         // Arrange
-        this.taskRepository.GetTasksAsync(Arg.Any<CancellationToken>())
-            .Returns(new List<TaskEntity>());
+        this.taskRepository.GetTaskByIdAsync(Arg.Any<TaskId>(), Arg.Any<CancellationToken>())
+            .Returns(this.taskEntity1);
 
-        var query = new GetTasks();
+        var query = new GetTaskById
+        {
+            Id = TASK_ID_GUID_1,
+        };
 
         // Act
         var result = await this.handler.Handle(query, CancellationToken.None);
 
         // Assert
         result.Should()
-            .BeEmpty()
+            .BeEquivalentTo(TASK_RESULT_1)
             ;
     }
 
     [Fact]
-    public async Task Handle_Should_ReturnTasks()
+    public async Task Handle_ShouldReturnIncompleteTask_WhenTaskExists()
     {
         // Arrange
-        var entities = new List<TaskEntity>
+        this.taskRepository.GetTaskByIdAsync(Arg.Any<TaskId>(), Arg.Any<CancellationToken>())
+            .Returns(this.taskEntity2);
+
+        var query = new GetTaskById
         {
-            this.taskEntity1,
-            this.taskEntity2,
+            Id = TASK_ID_GUID_2,
         };
-
-        this.taskRepository.GetTasksAsync(Arg.Any<CancellationToken>())
-            .Returns(entities);
-
-        var query = new GetTasks();
 
         // Act
         var result = await this.handler.Handle(query, CancellationToken.None);
 
         // Assert
         result.Should()
-            .NotBeNull()
-            .And
-            .HaveCount(2)
-            .And
-            .BeEquivalentTo(TASK_RESULTS)
+            .BeEquivalentTo(TASK_RESULT_2)
+            ;
+    }
+
+    [Fact]
+    public async Task Handle_ShouldReturnNull_WhenTaskDoesNotExist()
+    {
+        // Arrange
+        this.taskRepository.GetTaskByIdAsync(Arg.Any<TaskId>(), Arg.Any<CancellationToken>())
+            .Returns((TaskEntity?)null);
+
+        var query = new GetTaskById
+        {
+            Id = TASK_ID_GUID_1,
+        };
+
+        // Act
+        var result = await this.handler.Handle(query, CancellationToken.None);
+
+        // Assert
+        result.Should()
+            .BeNull()
             ;
     }
 }

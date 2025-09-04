@@ -22,6 +22,17 @@ public sealed class TasksController : ControllerBase
         return this.Accepted();
     }
 
+    [HttpGet, Route("GetTaskById")]
+    public async Task<TaskResult?> GetTaskById([FromQuery] Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetTaskById
+        {
+            Id = id,
+        };
+
+        return await this.mediator.Send(query, cancellationToken);
+    }
+
     [HttpGet, Route("GetTasks")]
     public async Task<IReadOnlyList<TaskResult>> GetTasks(CancellationToken cancellationToken)
     {

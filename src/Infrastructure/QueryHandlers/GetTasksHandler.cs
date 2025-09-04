@@ -3,6 +3,7 @@
 using ToDoApp.Application.Interfaces;
 using ToDoApp.Application.Queries;
 using ToDoApp.Application.Results;
+using ToDoApp.Infrastructure.Extensions;
 
 public sealed class GetTasksHandler : IRequestHandler<GetTasks, IReadOnlyList<TaskResult>>
 {
@@ -21,6 +22,8 @@ public sealed class GetTasksHandler : IRequestHandler<GetTasks, IReadOnlyList<Ta
 
         var tasks = await this.repository.GetTasksAsync(cancellationToken);
 
-        return tasks;
+        var results = tasks.ToResults();
+
+        return results;
     }
 }
