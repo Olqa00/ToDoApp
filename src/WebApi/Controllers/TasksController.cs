@@ -64,4 +64,12 @@ public sealed class TasksController : ControllerBase
 
         return await this.mediator.Send(query, cancellationToken);
     }
+
+    [HttpGet, Route("GetUncompletedTasks")]
+    public async Task<IReadOnlyList<TaskResult>> GetUncompletedTasks(CancellationToken cancellationToken)
+    {
+        var query = new GetUncompletedTasks();
+
+        return await this.mediator.Send(query, cancellationToken);
+    }
 }

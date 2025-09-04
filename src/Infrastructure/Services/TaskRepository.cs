@@ -103,4 +103,17 @@ internal sealed class TaskRepository : ITaskRepository
 
         return entities;
     }
+
+    public async Task<IReadOnlyList<TaskEntity>> GetUncompletedTasksAsync(CancellationToken cancellationToken)
+    {
+        this.logger.LogInformation("Try to get uncompleted tasks from db");
+
+        var taskDbModels = await this.tasks
+            .Where(task => task.PercentComplete != 100)
+            .ToListAsync(cancellationToken);
+
+        var entities = taskDbModels.ToEntities();
+
+        return entities;
+    }
 }
