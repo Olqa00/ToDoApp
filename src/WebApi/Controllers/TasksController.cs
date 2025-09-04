@@ -22,6 +22,27 @@ public sealed class TasksController : ControllerBase
         return this.Accepted();
     }
 
+    [HttpPut, Route("CompleteTask")]
+    public async Task<IActionResult> CompleteTask([FromBody] CompleteTask command, CancellationToken cancellationToken)
+    {
+        await this.mediator.Send(command, cancellationToken);
+
+        return this.Accepted();
+    }
+
+    [HttpDelete, Route("DeleteTask")]
+    public async Task<IActionResult> DeleteTask([FromQuery] Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteTask
+        {
+            Id = id,
+        };
+
+        await this.mediator.Send(command, cancellationToken);
+
+        return this.Accepted();
+    }
+
     [HttpGet, Route("GetTaskById")]
     public async Task<TaskResult?> GetTaskById([FromQuery] Guid id, CancellationToken cancellationToken)
     {
@@ -75,6 +96,14 @@ public sealed class TasksController : ControllerBase
 
     [HttpPut, Route("RescheduleTask")]
     public async Task<IActionResult> RescheduleTask([FromBody] RescheduleTask command, CancellationToken cancellationToken)
+    {
+        await this.mediator.Send(command, cancellationToken);
+
+        return this.Accepted();
+    }
+
+    [HttpPut, Route("SetPercentOfComplete")]
+    public async Task<IActionResult> SetPercentOfComplete([FromBody] SetPercentOfComplete command, CancellationToken cancellationToken)
     {
         await this.mediator.Send(command, cancellationToken);
 
