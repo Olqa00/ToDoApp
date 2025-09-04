@@ -49,4 +49,17 @@ public static class TaskDbModelExtensions
 
         return results;
     }
+
+    public static TaskDbModel UpdateDbModel(this TaskDbModel dbModel, TaskEntity entity)
+    {
+        dbModel.CompletedAt = entity.CompletedAt;
+        dbModel.Title = entity.Title;
+        dbModel.Description = entity.Description;
+        dbModel.CreatedAt = entity.CreatedAt;
+        dbModel.ExpiryDateTime = entity.ExpiryDateTime;
+        dbModel.PercentComplete = entity.PercentComplete;
+        dbModel.CompletedAt = entity.CompletedAt;
+
+        return dbModel;
+    }
 }

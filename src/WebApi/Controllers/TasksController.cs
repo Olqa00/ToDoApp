@@ -72,4 +72,12 @@ public sealed class TasksController : ControllerBase
 
         return await this.mediator.Send(query, cancellationToken);
     }
+
+    [HttpPut, Route("UpdateTask")]
+    public async Task<IActionResult> UpdateTask([FromBody] UpdateTask command, CancellationToken cancellationToken)
+    {
+        await this.mediator.Send(command, cancellationToken);
+
+        return this.Accepted();
+    }
 }

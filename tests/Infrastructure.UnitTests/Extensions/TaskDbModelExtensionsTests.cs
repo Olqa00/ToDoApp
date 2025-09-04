@@ -155,4 +155,57 @@ public sealed class TaskDbModelExtensionsTests
             .BeEquivalentTo(TASK_RESULTS)
             ;
     }
+
+    [Fact]
+    public void UpdateDbModel_Should_UpdateCompletedDbModel()
+    {
+        // Arrange
+        var expectedDbModel = new TaskDbModel
+        {
+            CompletedAt = COMPETED_AT_1,
+            CreatedAt = CREATED_AT_2,
+            Description = DESCRIPTION_2,
+            ExpiryDateTime = EXPIRY_DATE_TIME_2,
+            Id = TASK_ID_GUID_1,
+            PercentComplete = PERCENT_1,
+            Title = TITLE_2,
+        };
+
+        var newEntity = new TaskEntity(TASK_ID_1, TITLE_2, CREATED_AT_2, DESCRIPTION_2, EXPIRY_DATE_TIME_2);
+        newEntity.SetPercentComplete(PERCENT_1, COMPETED_AT_1);
+
+        // Act
+        var result = TASK_DB_MODEL_1.UpdateDbModel(newEntity);
+
+        // Assert
+        result.Should()
+            .BeEquivalentTo(expectedDbModel)
+            ;
+    }
+
+    [Fact]
+    public void UpdateDbModel_Should_UpdateDbModel()
+    {
+        // Arrange
+        var expectedDbModel = new TaskDbModel
+        {
+            CreatedAt = CREATED_AT_2,
+            Description = DESCRIPTION_2,
+            ExpiryDateTime = EXPIRY_DATE_TIME_2,
+            Id = TASK_ID_GUID_1,
+            PercentComplete = PERCENT_2,
+            Title = TITLE_2,
+        };
+
+        var newEntity = new TaskEntity(TASK_ID_1, TITLE_2, CREATED_AT_2, DESCRIPTION_2, EXPIRY_DATE_TIME_2);
+        newEntity.SetPercentComplete(PERCENT_2, completedAt: null);
+
+        // Act
+        var result = TASK_DB_MODEL_1.UpdateDbModel(newEntity);
+
+        // Assert
+        result.Should()
+            .BeEquivalentTo(expectedDbModel)
+            ;
+    }
 }

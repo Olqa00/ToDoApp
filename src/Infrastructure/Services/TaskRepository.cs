@@ -2,6 +2,7 @@
 
 using ToDoApp.Application.Interfaces;
 using ToDoApp.Domain.Entities;
+using ToDoApp.Infrastructure.Exceptions;
 using ToDoApp.Infrastructure.Extensions;
 using ToDoApp.Infrastructure.Models;
 using ToDoApp.Infrastructure.MySql;
@@ -30,6 +31,25 @@ internal sealed class TaskRepository : ITaskRepository
         var dbModel = entity.ToDbModel();
 
         await this.dbContext.AddAsync(dbModel, cancellationToken);
+        await this.dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteTaskAsync(TaskId id, CancellationToken cancellationToken)
+    {
+        using var loggerScope = this.logger.BeginScope(
+            (nameof(TaskId), id)
+        );
+
+        this.logger.LogInformation("Try to delete task from db");
+
+        var dbModel = await this.tasks.FirstOrDefaultAsync(task => task.Id == id.Value, cancellationToken);
+
+        if (dbModel is null)
+        {
+            throw new TaskNotFoundException(id);
+        }
+
+        this.dbContext.Remove(dbModel);
         await this.dbContext.SaveChangesAsync(cancellationToken);
     }
 
@@ -115,5 +135,22 @@ internal sealed class TaskRepository : ITaskRepository
         var entities = taskDbModels.ToEntities();
 
         return entities;
+    }
+
+    public Task UpdateTaskAsync(TaskEntity task, CancellationToken cancellationToken)
+    {
+        this.logger.LogInformation("Try to update task in db");
+
+        var dbModel = this.tasks.FirstOrDefault(dbTask => dbTask.Id == task.Id.Value);
+
+        if (dbModel is null)
+        {
+            throw new TaskNotFoundException(task.Id);
+        }
+
+        dbModel.UpdateDbModel(task);
+        this.dbContext.Update(dbModel);
+
+        return this.dbContext.SaveChangesAsync(cancellationToken);
     }
 }
