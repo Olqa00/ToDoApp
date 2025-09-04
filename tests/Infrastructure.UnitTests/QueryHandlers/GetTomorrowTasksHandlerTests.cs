@@ -48,7 +48,7 @@ public sealed class GetTomorrowTasksHandlerTests
     public async Task Handle_Should_ReturnEmptyList_When_NoToDoTasks()
     {
         // Arrange
-        this.taskRepository.GetTasksDueOnDay(Arg.Any<DateTime>(), Arg.Any<CancellationToken>())
+        this.taskRepository.GetTasksDueOnDayAsync(Arg.Any<DateTime>(), Arg.Any<CancellationToken>())
             .Returns(new List<TaskEntity>());
 
         var query = new GetTomorrowTasks();
@@ -66,7 +66,7 @@ public sealed class GetTomorrowTasksHandlerTests
     public async Task Handle_Should_ReturnListOfToDoTasks_When_ThereAreToDoTasks()
     {
         // Arrange
-        this.taskRepository.GetTasksDueOnDay(Arg.Any<DateTime>(), Arg.Any<CancellationToken>())
+        this.taskRepository.GetTasksDueOnDayAsync(Arg.Any<DateTime>(), Arg.Any<CancellationToken>())
             .Returns(new List<TaskEntity> { this.taskEntity });
 
         var query = new GetTomorrowTasks();

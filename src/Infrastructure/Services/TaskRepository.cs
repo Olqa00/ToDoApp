@@ -66,7 +66,28 @@ internal sealed class TaskRepository : ITaskRepository
         return entities;
     }
 
-    public async Task<IReadOnlyList<TaskEntity>> GetTasksDueOnDay(DateTime expiryDate, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<TaskEntity>> GetTasksDueBetweenAsync(DateTime from, DateTime to, CancellationToken cancellationToken)
+    {
+        using var loggerScope = this.logger.BeginScope(new Dictionary<string, object?>
+        {
+            ["date_from"] = from,
+            ["date_to"] = to,
+        });
+
+        this.logger.LogInformation("Try to get tasks due between {From} and {To}", from, to);
+
+        var fromDate = from.Date;
+        var toDate = to.Date.AddDays(1);
+
+        var taskDbModels = await this.tasks
+            .Where(task => task.PercentComplete != 100)
+            .Where(task => task.ExpiryDateTime >= fromDate && task.ExpiryDateTime < toDate)
+            .ToListAsync(cancellationToken);
+
+        return taskDbModels.ToEntities();
+    }
+
+    public async Task<IReadOnlyList<TaskEntity>> GetTasksDueOnDayAsync(DateTime expiryDate, CancellationToken cancellationToken)
     {
         this.logger.LogInformation("Try to get tasks by expiry date from db");
 

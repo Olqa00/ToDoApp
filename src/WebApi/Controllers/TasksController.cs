@@ -41,6 +41,14 @@ public sealed class TasksController : ControllerBase
         return await this.mediator.Send(query, cancellationToken);
     }
 
+    [HttpGet, Route("GetTasksForCurrentWeek")]
+    public async Task<IReadOnlyList<TaskResult>> GetTasksForCurrentWeek(CancellationToken cancellationToken)
+    {
+        var query = new GetTasksForCurrentWeek();
+
+        return await this.mediator.Send(query, cancellationToken);
+    }
+
     [HttpGet, Route("GetTodayTasks")]
     public async Task<IReadOnlyList<TaskResult>> GetTodayTasks(CancellationToken cancellationToken)
     {

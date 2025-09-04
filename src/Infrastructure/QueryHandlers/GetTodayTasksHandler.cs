@@ -29,7 +29,7 @@ internal sealed class GetTodayTasksHandler : IRequestHandler<GetTodayTasks, IRea
 
         this.logger.LogInformation("Try to get today tasks.");
 
-        var entities = await this.repository.GetTasksDueOnDay(today, cancellationToken);
+        var entities = await this.repository.GetTasksDueOnDayAsync(today, cancellationToken);
 
         var results = entities.ToResults();
 
