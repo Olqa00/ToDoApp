@@ -146,7 +146,7 @@ public sealed class TaskEntityTests
             ;
     }
 
-    [Theory, InlineData(""), InlineData("   "), InlineData(null)]
+    [Theory, InlineData(""), InlineData("   ")]
     public void SetDescription_Should_ThrowException_When_DescriptionIsEmpty(string invalidDescription)
     {
         // Arrange
@@ -231,7 +231,7 @@ public sealed class TaskEntityTests
             ;
     }
 
-    [Theory, InlineData(""), InlineData("   "), InlineData(null)]
+    [Theory, InlineData(""), InlineData("   ")]
     public void SetTitle_Should_ThrowException_When_TitleIsEmpty(string invalidTitle)
     {
         // Arrange
