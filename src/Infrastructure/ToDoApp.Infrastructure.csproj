@@ -38,5 +38,6 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="ToDoApp.Infrastructure.UnitTests" />
+    <InternalsVisibleTo Include="ToDoApp.IntegrationTests" />
   </ItemGroup>
 </Project>

@@ -164,6 +164,7 @@ nCrunchTemp_*
 TodoApp.v3.ncrunchsolution
 /src/TodoApp.v3.ncrunchsolution
 /tests/TodoApp.UnitTests.v3.ncrunchsolution
+*ncrunch*
 
 # MightyMoose
 *.mm.*
