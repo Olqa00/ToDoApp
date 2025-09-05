@@ -3,6 +3,8 @@ using ToDoApp.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.AddSeq();
+
 builder.Services.AddControllers();
 
 builder.Services
