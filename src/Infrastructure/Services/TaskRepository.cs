@@ -70,9 +70,9 @@ internal sealed class TaskRepository : ITaskRepository
             return null;
         }
 
-        var entities = dbModel.ToEntity();
+        var entity = dbModel.ToEntity();
 
-        return entities;
+        return entity;
     }
 
     public async Task<IReadOnlyList<TaskEntity>> GetTasksAsync(CancellationToken cancellationToken)

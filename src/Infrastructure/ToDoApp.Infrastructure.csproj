@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.8" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
   </ItemGroup>
 
@@ -38,5 +39,6 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="ToDoApp.Infrastructure.UnitTests" />
+    <InternalsVisibleTo Include="ToDoApp.IntegrationTests" />
   </ItemGroup>
 </Project>
