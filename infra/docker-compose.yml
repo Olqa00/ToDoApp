@@ -12,7 +12,7 @@ services:
     container_name: mysql
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: P@ssw0rd
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-P@ssw0rd}
       MYSQL_DATABASE: todo_db
     ports:
       - "3306:3306"

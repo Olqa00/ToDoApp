@@ -1,7 +1,10 @@
 ﻿namespace ToDoApp.Infrastructure.MySql;
 
+using DotNetEnv;
+
 public static class DependencyInjection
 {
+    private const string ENV_PATH = "../../infra/.env";
     private const string OPTIONS_SECTION_NAME = "MySql";
 
     public static IServiceCollection AddMySqlDb(this IServiceCollection services, IConfiguration configuration)
@@ -9,6 +12,15 @@ public static class DependencyInjection
         var section = configuration.GetSection(OPTIONS_SECTION_NAME);
         services.Configure<MySqlOptions>(section);
         var options = configuration.GetOptions<MySqlOptions>(OPTIONS_SECTION_NAME);
+
+        Env.Load(Path.Combine(Directory.GetCurrentDirectory(), ENV_PATH));
+
+        var envConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+
+        if (string.IsNullOrWhiteSpace(envConnectionString) is false)
+        {
+            options.ConnectionString = envConnectionString;
+        }
 
         services.AddDbContext<ToDoDbContext>(option => option.UseMySql(options.ConnectionString,
             ServerVersion.AutoDetect(options.ConnectionString),
