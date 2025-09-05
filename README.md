@@ -44,6 +44,7 @@ The application uses **environment variables** for the database connection strin
 ```env
 DB_CONNECTION_STRING=Server=localhost;Port=3306;Database=todo_db;User=root;Password=P@ssw0rd;
 MYSQL_ROOT_PASSWORD=P@ssw0rd
+```
 
 ## ▶️ Getting Started
 
