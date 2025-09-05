@@ -6,7 +6,7 @@ A simple **ToDo application** built with modern technologies, demonstrating clea
 
 ## 📌 Features
 
-- **Task entity (`Task`)** with full CRUD support:
+- **Task entity (`Task`)** with full task management API:
   - Get all tasks
   - Get all uncompleted tasks
   - Get task
