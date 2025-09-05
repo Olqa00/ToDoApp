@@ -26,6 +26,8 @@ public static class DependencyInjection
             ServerVersion.AutoDetect(options.ConnectionString),
             b => b.MigrationsAssembly(typeof(ToDoDbContext).Assembly.FullName)));
 
+        services.AddHostedService<DatabaseInitializer>();
+
         return services;
     }
 
