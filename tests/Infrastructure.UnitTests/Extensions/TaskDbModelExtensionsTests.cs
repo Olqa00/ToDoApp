@@ -47,6 +47,28 @@ public sealed class TaskDbModelExtensionsTests
         Title = TITLE_2,
     };
 
+    private static readonly TaskDbModel TASK_DB_MODEL_UPDATED_1 = new()
+    {
+        CompletedAt = COMPETED_AT_1,
+        CreatedAt = CREATED_AT_1,
+        Description = DESCRIPTION_1,
+        ExpiryDateTime = EXPIRY_DATE_TIME_1,
+        Id = TASK_ID_GUID_1,
+        PercentComplete = PERCENT_1,
+        Title = TITLE_1,
+    };
+
+    private static readonly TaskDbModel TASK_DB_MODEL_UPDATED_2 = new()
+    {
+        CompletedAt = null,
+        CreatedAt = CREATED_AT_2,
+        Description = DESCRIPTION_2,
+        ExpiryDateTime = EXPIRY_DATE_TIME_2,
+        Id = TASK_ID_GUID_2,
+        PercentComplete = PERCENT_2,
+        Title = TITLE_2,
+    };
+
     private static readonly List<TaskDbModel> TASK_DB_MODELS =
     [
         TASK_DB_MODEL_1,
@@ -90,15 +112,15 @@ public sealed class TaskDbModelExtensionsTests
     {
         this.taskEntity1 = new TaskEntity(TASK_ID_1, TITLE_1, CREATED_AT_1, DESCRIPTION_1, EXPIRY_DATE_TIME_1);
         this.taskEntity2 = new TaskEntity(TASK_ID_2, TITLE_2, CREATED_AT_2, DESCRIPTION_2, EXPIRY_DATE_TIME_2);
-
-        this.taskEntity1.Complete(COMPETED_AT_1);
-        this.taskEntity2.SetPercentComplete(PERCENT_2, completedAt: null);
     }
 
     [Fact]
     public void ToEntities_Should_ReturnEntities()
     {
         // Arrange
+        this.taskEntity1.Complete(COMPETED_AT_1);
+        this.taskEntity2.SetPercentComplete(PERCENT_2, completedAt: null);
+
         var entities = new List<TaskEntity>
         {
             this.taskEntity1,
@@ -118,6 +140,7 @@ public sealed class TaskDbModelExtensionsTests
     public void ToEntity_Should_ReturnEntity()
     {
         // Arrange
+        this.taskEntity1.Complete(COMPETED_AT_1);
 
         // Act
         var result = TASK_DB_MODEL_1.ToEntity();
@@ -175,7 +198,7 @@ public sealed class TaskDbModelExtensionsTests
         newEntity.SetPercentComplete(PERCENT_1, COMPETED_AT_1);
 
         // Act
-        var result = TASK_DB_MODEL_1.UpdateDbModel(newEntity);
+        var result = TASK_DB_MODEL_UPDATED_1.UpdateDbModel(newEntity);
 
         // Assert
         result.Should()
@@ -192,16 +215,16 @@ public sealed class TaskDbModelExtensionsTests
             CreatedAt = CREATED_AT_2,
             Description = DESCRIPTION_2,
             ExpiryDateTime = EXPIRY_DATE_TIME_2,
-            Id = TASK_ID_GUID_1,
+            Id = TASK_ID_GUID_2,
             PercentComplete = PERCENT_2,
             Title = TITLE_2,
         };
 
-        var newEntity = new TaskEntity(TASK_ID_1, TITLE_2, CREATED_AT_2, DESCRIPTION_2, EXPIRY_DATE_TIME_2);
+        var newEntity = new TaskEntity(TASK_ID_2, TITLE_2, CREATED_AT_2, DESCRIPTION_2, EXPIRY_DATE_TIME_2);
         newEntity.SetPercentComplete(PERCENT_2, completedAt: null);
 
         // Act
-        var result = TASK_DB_MODEL_1.UpdateDbModel(newEntity);
+        var result = TASK_DB_MODEL_UPDATED_2.UpdateDbModel(newEntity);
 
         // Assert
         result.Should()

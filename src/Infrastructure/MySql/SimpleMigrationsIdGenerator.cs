@@ -6,5 +6,5 @@ public sealed class SimpleMigrationsIdGenerator : IMigrationsIdGenerator
 
     public string GetName(string id) => id;
 
-    public bool IsValidId(string id) => true;
+    public bool IsValidId(string value) => true;
 }

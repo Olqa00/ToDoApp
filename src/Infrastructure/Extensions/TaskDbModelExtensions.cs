@@ -58,7 +58,6 @@ public static class TaskDbModelExtensions
         dbModel.CreatedAt = entity.CreatedAt;
         dbModel.ExpiryDateTime = entity.ExpiryDateTime;
         dbModel.PercentComplete = entity.PercentComplete;
-        dbModel.CompletedAt = entity.CompletedAt;
 
         return dbModel;
     }
